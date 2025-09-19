@@ -9,6 +9,8 @@ import base64
 import time
 from mimetypes import guess_type
 from openai import OpenAI, OpenAIError
+from dotenv import load_dotenv
+load_dotenv()
 
 # Configure logging with detailed output
 logging.basicConfig(
@@ -29,7 +31,7 @@ DEBUG_IMAGE_DIR = "debug_images"
 DEBUG_BASE64_DIR = "debug_base64"
 
 # Open AI API configuration
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "fake-key")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if not OPENAI_API_KEY:
     logging.error("OPENAI_API_KEY environment variable not set")
     raise ValueError("OPENAI_API_KEY environment variable is required")
