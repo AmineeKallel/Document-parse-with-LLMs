@@ -1,0 +1,155 @@
+--- Page 1 ---
+Quesiati Ahmed Ben Moez
+ME 2742 740/W/P/A/000
+Adr: 4, rue Algerie cartier jardin, Fouchana, Ben Arous
+
+Tel: 53406080 34-1-2022
+BiB: 080320120420053 16464
+MAT LACL Facture 01/2022
+
+MF: 1523752/A/M/A/000
+
+0000001
+
+
+--- Page 2 ---
+Ouestati Ahmed Ben Moez
+MF: 17422740/W/P/A/000
+
+Adr: 4, cue Algerie cartier jardin, Fouchana, Ben Arous
+
+Tel: $3406080 28/02/2022
+RIB: 08032012042005316464
+IAT LAC Facture 02/2022
+
+CLIENT: LEVEL 1 HUB
+
+MF. 15237S2/A/M/A/000
+
+0000001
+
+
+--- Page 3 ---
+Ouesati Ahmed Ben Moez
+ME © 1742740/W/P/A/000
+Adr: 4, rue Algerie cartier jardin, Fouchana, Ben Arous
+
+Tek 53406080 31/03/2022
+RIB: 08032012042005316464
+RAT LACL Facture 03/2022
+
+‘ iH
+
+MF : 1523752/A/M/A/000
+
+0000001
+
+
+--- Page 4 ---
+Ouestati Ahmed Ben Moe:
+ME: 3742740/w/P/A/000
+Adt: 4, 1ue Algerie cartier jardin, Fouchana, Ben Arous
+
+Tet: $3406090 30/04/2022
+RIB: 08032012042005316464
+BATLACL Facture 04/2022
+
+CLIENT: LEVEL 1 HUB
+
+MP : 1$23752/A/M/A/000
+
+0000001
+
+
+--- Page 5 ---
+Ouesiati Ahmed Ben Moez
+MEF | 1742740/W/P/A/000
+
+Acr: 4, nue Algerie cartier jardin, Fouchana, Ben Arous
+Tei: 53406080
+
+Rue. 080320120420053 16464
+
+MATIACL
+
+31/05/2022
+
+Facture 08/2022
+
+MF + 1523752/A/M/A/000
+
+0000001
+
+
+--- Page 6 ---
+Oveslati Anmed Ben Moez
+Mi: 1742,740/W/P/AS000
+
+Ade; 4, rue Algerie cartier jardin, Fouchana, Ben Arous
+Tet: 53406080
+
+RB 080320120420053 16464
+
+WAT LAC 1 Facture 06/2022
+CLIENT: LEVEL 1 HUB
+
+MP: 1523752/A/M/A/Q00
+
+9000001
+
+30/06/2022
+
+
+--- Page 7 ---
+Oveslati Ahmed Ben Moez
+MP : 1742760/w/P/A/000
+
+Adr: 4, rue Algerie cartier jardin, Fouchana, Ben Arous
+Tel. 3406080
+
+ae 08032012042005316464
+
+@ATIACL Facture 07/2022
+
+31/07/2022
+
+CLIENT: LEVEL 1 HUBS
+
+ME. 1523 752/A/M/A/000
+
+0000001
+
+
+--- Page 8 ---
+Ovesiati Ahmed Ben Moez
+MF : 3742740/w/P/A/O00
+
+Ade: 4, rue Algerie cartier jardin, Fouchana, Ben Arous
+
+Tek $3406080 31/08/2022
+RIB: 08032012042005316464
+PRIAT LAC 1 Facture 08/2022
+
+MF : 1523752/A/M/A/000
+
+Assistance en gestion de projet
+
+0000001
+
+--- Page 9 ---
+Quesiati Ahmed Ben Moez
+MF : 1742740/W/P/A/000
+
+Adr: 4, rue Algerie cartier jardin, Fouchana, Ben Arous
+
+Tek: 53406080 30/09/2022
+R18. 08032012042005316464
+BATLACL Facture 09/2022
+
+CLIENT: LEVEL 1 HUB
+
+MEF 2523752/A/M/A/Q00
+
+0000001 ‘
+
+

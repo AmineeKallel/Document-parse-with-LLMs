@@ -1,0 +1,26 @@
+{
+  "id": "gen-1748195818-rWT0LJnJAcpZcaxLZiSw",
+  "provider": "Chutes",
+  "model": "google/gemma-3-27b-it:free",
+  "object": "chat.completion",
+  "created": 1748195818,
+  "choices": [
+    {
+      "logprobs": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "\n{\"رقم الفاتورة\":\"63/2022\", \"التاريخ\":\"26/10/2022\", \"المبلغ الإجمالي\":\"500,000 DT\", \"اسم المورد\":\"Brahim TURKI\", \"عنوان المورد\":\"Rue Victor Hugo Immeuble Mahjoub 3éme étage appartement C1 4000 Sousse\", \"رقم التعريفي الجبائي\":\"1523752A\"}",
+        "refusal": null,
+        "reasoning": null
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 727,
+    "completion_tokens": 107,
+    "total_tokens": 834
+  }
+}

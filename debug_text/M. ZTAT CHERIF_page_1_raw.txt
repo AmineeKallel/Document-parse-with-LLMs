@@ -1,0 +1,47 @@
+0:
+Société Hotelière el Hammam
+RUE DE LA TOUNKA
+LES BERGES DU LAC
+1053 TUNIS
+N° CNSS Société : 102851-73
+Etablissement : Les Berges du Lac
+Convention Collective : Hotellerie
+SUPÉRIEUR 1
+Prochain Echelon : Echelon 9
+Date de recrutement : 01/12/2005
+
+Bulletin de paie
+Troisième mois
+N° ETAT CHEFIP
+Matricule : 1000975
+TUN
+
+Rubriques                      Nombre de jours  Taux  Montants salariaux
+                                                              A payer       A déduire
+N09 IV Note Rendement Ste       19,000
+B42 Prime de rendement
+302
+701 Brut total                  1 655,687
+06 Cotisation CNSS             1 655,687
+21 Salaire imposable           1 655,687  9,180
+Assurance maladie             1 503,695  2,450          151,992
+IRPP                         1 655,687
+5 IV Avance sur salaire                                    40,566
+                                                         338,500
+                                                         1 060,000
+
+Du 23/11/2013 au 22/12/2013
+
+NET A PAYER : 124,631
+
+Brut                Charges Salariales      IRPP          Imposable
+Mensuels            1 655,687              0,000       -338,500      1 503,695
+Annuels             22 555,085                         -555,500     20 484,524
+
+Mode de paiement : Virement bancaire
+AGENCE 022          14022 0221007000837
+
+Société
+Salarié(e)
+
+---

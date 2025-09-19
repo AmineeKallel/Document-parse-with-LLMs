@@ -1,0 +1,33 @@
+8:
+BULLETIN DE PAIE
+CONSTRUCTION ET TRAVAUX SPECIAUX
+COTRAS
+BUREAU 52 AV HABIB BOURGUIBA
+Matricule CNSS : 201156-75
+
+Mois avril 2003
+Matricule 0187
+Nom ZOUHAIER B ABDEKARIM SAIDAN
+N° Cnss 11142713-05
+Type Paie Mensuel
+Section ADMINISTRATION
+Sit. Fam. M 1
+Fonction CHAUFFEUR OCCASIONNEL
+Cat. Echelon :
+
+RUBRIQUES          NBR    BASE      TAUX      MONTANT
+SALAIRE DE BASE    26.00  251.000             + 251.000
+PRIME DE PRESENCE                          + 2.080
+INDEMNITE DE TRANSPORT                    + 20.000
+PRIME DE DOUCHE                           + 1.083
+PRIME DE RENDEMENT                        + 30.000
+-*- SALAIRE BRUT -*-                      = 304.163
+-*- CNSS & RETRAITE -*-                   - 23.573
+-*- SALAIRE IMPOSABLE -*-                 = 280.590
+-*- I.R.P.P -*-                          - 16.138
+-*- SALAIRE NET -*-                       = 264.452
+
+EMARGEMENT
+
+DEUX CENT SOIXANTE QUATRE DINARS 452 MILLIMES
+NET A PAYER 264,452

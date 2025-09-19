@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Processor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .spinner {
+            display: none;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #downloadLinksContainer .download-link {
+            display: block;
+            margin-top: 0.5rem;
+        }
+        .sidebar {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .file-item:hover {
+            background-color: #f9fafb;
+        }
+        #dropArea {
+            border: 2px dashed #d1d5db;
+            border-radius: 0.375rem;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        #dropArea.dragover {
+            background-color: #f3f4f6;
+            border-color: #6366f1;
+        }
+        #dropArea:hover {
+            background-color: #f9fafb;
+        }
+        #uploadedFilesList {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        #uploadedFilesList .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        #uploadedFilesList .file-item:last-child {
+            border-bottom: none;
+        }
+        .select-checkbox {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 0.5rem;
+        }
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .button-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+        #selectButton {
+            background-color: #6b7280;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            line-height: 1rem;
+        }
+        #selectButton.select-mode {
+            background-color: #4b5563;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex min-h-screen">
+    <!-- Sidebar -->
+    <div class="w-64 bg-white shadow-lg sidebar p-4">
+        <h2 class="text-lg font-bold mb-4">Available Files</h2>
+        
+        <!-- Invoices Section -->
+        <div class="mb-6">
+            <h3 class="text-md font-semibold mb-2">Invoices</h3>
+            <div id="invoiceList" class="space-y-1"></div>
+        </div>
+        
+        <!-- Handwritten Invoices Section -->
+        <div class="mb-6">
+            <h3 class="text-md font-semibold mb-2">Handwritten Invoices</h3>
+            <div id="handwrittenInvoiceList" class="space-y-1"></div>
+        </div>
+        
+        <!-- Contracts Section -->
+        <div class="mb-6">
+            <h3 class="text-md font-semibold mb-2">Contracts</h3>
+            <div id="contractList" class="space-y-1"></div>
+        </div>
+        
+        <!-- Pay Slips Section -->
+        <div class="flex-1">
+            <h3 class="text-md font-semibold mb-2">Pay Slips</h3>
+            <input id="paySlipFilter" type="text" placeholder="Filter by client name" class="w-full mb-2 p-2 border border-gray-300 rounded-md text-sm" oninput="filterPaySlips()">
+            <div id="paySlipList" class="space-y-1"></div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 flex items-center justify-center p-4">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+            <form id="uploadForm" enctype="multipart/form-data" class="space-y-4">
+                <div class="mb-6">
+                    <label for="doc_type" class="block text-sm font-medium text-gray-700">Select Document Type</label>
+                    <select id="doc_type" name="doc_type" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" onchange="updateFileAccept()">
+                        <option value="invoices">Invoices</option>
+                        <option value="handwritten_invoices">Handwritten Invoices</option>
+                        <option value="contracts">Contracts</option>
+                        <option value="pay_slips">Pay Slips</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="file-input" class="block text-sm font-medium text-gray-700">Upload Files</label>
+                    <div id="dropArea" class="mt-1">
+                        <p class="text-sm text-gray-600">Drag and drop files here or click to select</p>
+                        <input id="file-input" type="file" name="files" multiple accept=".pdf" class="hidden">
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div id="uploadedCounter" class="text-sm font-medium text-gray-700 mb-2 hidden">Uploaded Files: <span id="fileCount">0</span></div>
+                    <div id="uploadHeader" class="header-container mb-2 hidden">
+                        <button id="selectButton" type="button">Select</button>
+                        <button id="clearAllButton" type="button" class="bg-red-600 text-white py-1 px-2 rounded-md text-xs hover:bg-red-700">Clear All</button>
+                    </div>
+                    <div id="uploadedFilesList"></div>
+                </div>
+                <button type="button" id="processButton" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 hidden">Process Files</button>
+            </form>
+            <div id="processing" class="spinner mt-4"></div>
+            <p id="status" class="mt-4 text-center text-sm text-gray-600"></p>
+            <div id="downloadLinksContainer" class="mt-4">
+                <p id="processedCounter" class="text-sm font-medium text-gray-700 mb-2 text-center hidden">Processed Files: <span id="processedCount">0</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let uploadedFiles = [];
+        let fileDisplayNames = [];
+        let processedFileCount = 0;
+        let isSelectMode = false;
+        let selectedIndices = [];
+
+        function normalizeName(name) {
+            return name.replace(/_/g, ' ')
+                       .trim()
+                       .toLowerCase()
+                       .replace(/\s+/g, ' ')
+                       .replace(/(^|\s)\w/g, letter => letter.toUpperCase());
+        }
+
+        function updateFileAccept() {
+            const docType = document.getElementById('doc_type').value;
+            const fileInput = document.getElementById('file-input');
+            if (docType === 'invoices' || docType === 'pay_slips') {
+                fileInput.accept = '.pdf';
+            } else if (docType === 'handwritten_invoices' || docType === 'contracts') {
+                fileInput.accept = '.pdf,.png,.jpg,.jpeg,.tiff';
+            }
+        }
+
+        function isDuplicateFile(newFile) {
+            return uploadedFiles.some(
+                file => file.name === newFile.name && file.size === newFile.size
+            );
+        }
+
+        async function handleFileUpload(newFiles) {
+            for (const file of newFiles) {
+                if (isDuplicateFile(file)) {
+                    const result = await Swal.fire({
+                        title: 'Duplicate File Detected',
+                        text: `The file "${file.name}" is already uploaded. Do you want to add it again?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, add it',
+                        cancelButtonText: 'No, skip',
+                    });
+
+                    if (result.isConfirmed) {
+                        uploadedFiles.push(file);
+                        fileDisplayNames.push(`${file.name} (Duplicate)`);
+                    }
+                } else {
+                    uploadedFiles.push(file);
+                    fileDisplayNames.push(file.name);
+                }
+            }
+
+            const fileInput = document.getElementById('file-input');
+            const dataTransfer = new DataTransfer();
+            uploadedFiles.forEach(file => dataTransfer.items.add(file));
+            fileInput.files = dataTransfer.files;
+            displayUploadedFiles();
+            updateFileCounter();
+        }
+
+        function updateFileCounter() {
+            const uploadedCounter = document.getElementById('uploadedCounter');
+            const fileCount = document.getElementById('fileCount');
+            const uploadHeader = document.getElementById('uploadHeader');
+            fileCount.textContent = uploadedFiles.length;
+            if (uploadedFiles.length > 0) {
+                uploadedCounter.classList.remove('hidden');
+                uploadHeader.classList.remove('hidden');
+            } else {
+                uploadedCounter.classList.add('hidden');
+                uploadHeader.classList.add('hidden');
+                if (isSelectMode) toggleSelectMode();
+            }
+        }
+
+        function updateProcessedCounter(count) {
+            const processedCounter = document.getElementById('processedCounter');
+            processedFileCount = count;
+            document.getElementById('processedCount').textContent = processedFileCount;
+            if (processedFileCount > 0) {
+                processedCounter.classList.remove('hidden');
+            } else {
+                processedCounter.classList.add('hidden');
+            }
+        }
+
+        function toggleSelectMode() {
+            isSelectMode = !isSelectMode;
+            selectedIndices = [];
+            const selectButton = document.getElementById('selectButton');
+            const clearAllButton = document.getElementById('clearAllButton');
+            selectButton.textContent = isSelectMode ? 'Select' : 'Select';
+            selectButton.classList.toggle('select-mode', isSelectMode);
+            clearAllButton.textContent = isSelectMode ? 'Clear' : 'Clear All';
+            displayUploadedFiles();
+        }
+
+        function toggleFileSelection(index) {
+            const idx = selectedIndices.indexOf(index);
+            if (idx === -1) {
+                selectedIndices.push(index);
+            } else {
+                selectedIndices.splice(idx, 1);
+            }
+            displayUploadedFiles();
+        }
+
+        function displayUploadedFiles() {
+            const uploadedFilesList = document.getElementById('uploadedFilesList');
+            const processButton = document.getElementById('processButton');
+            uploadedFilesList.innerHTML = '';
+
+            if (uploadedFiles.length > 0) {
+                processButton.classList.remove('hidden');
+                uploadedFiles.forEach((file, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'file-item';
+                    const isSelected = selectedIndices.includes(index);
+                    const checkbox = isSelectMode
+                        ? `<input type="checkbox" class="select-checkbox" ${isSelected ? 'checked' : ''} onclick="toggleFileSelection(${index})">`
+                        : '';
+                    div.innerHTML = `
+                        ${checkbox}
+                        <span class="text-sm truncate flex-1">${fileDisplayNames[index]}</span>
+                        <button type="button" class="bg-red-600 text-white py-1 px-2 rounded-md text-xs hover:bg-red-700" onclick="removeFile(${index})"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                    `;
+                    uploadedFilesList.appendChild(div);
+                });
+            } else {
+                processButton.classList.add('hidden');
+            }
+        }
+
+        async function removeFile(index) {
+            const result = await Swal.fire({
+                title: 'Confirm Removal',
+                text: `Are you sure you want to remove "${fileDisplayNames[index]}"?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, remove',
+                cancelButtonText: 'Cancel',
+            });
+
+            if (result.isConfirmed) {
+                uploadedFiles.splice(index, 1);
+                fileDisplayNames.splice(index, 1);
+                selectedIndices = selectedIndices
+                    .filter(idx => idx !== index)
+                    .map(idx => idx > index ? idx - 1 : idx);
+                const fileInput = document.getElementById('file-input');
+                const dataTransfer = new DataTransfer();
+                uploadedFiles.forEach(file => dataTransfer.items.add(file));
+                fileInput.files = dataTransfer.files;
+                displayUploadedFiles();
+                updateFileCounter();
+                Swal.fire({
+                    title: 'Success',
+                    text: 'File removed successfully',
+                    icon: 'success',
+                    timer: 1500,
+                    showConfirmButton: false,
+                });
+            }
+        }
+
+        async function clearFiles() {
+            if (uploadedFiles.length === 0) return;
+
+            const isClearSelected = isSelectMode && selectedIndices.length > 0;
+            const title = isClearSelected ? 'Clear Selected Files' : 'Clear All Files';
+            const text = isClearSelected
+                ? `Are you sure you want to clear ${selectedIndices.length} selected file(s)?`
+                : `Are you sure you want to clear all ${uploadedFiles.length} file(s)?`;
+
+            const result = await Swal.fire({
+                title,
+                text,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, clear',
+                cancelButtonText: 'Cancel',
+            });
+
+            if (result.isConfirmed) {
+                if (isClearSelected) {
+                    selectedIndices.sort((a, b) => b - a);
+                    selectedIndices.forEach(idx => {
+                        uploadedFiles.splice(idx, 1);
+                        fileDisplayNames.splice(idx, 1);
+                    });
+                    selectedIndices = [];
+                } else {
+                    uploadedFiles = [];
+                    fileDisplayNames = [];
+                    selectedIndices = [];
+                }
+                const fileInput = document.getElementById('file-input');
+                const dataTransfer = new DataTransfer();
+                uploadedFiles.forEach(file => dataTransfer.items.add(file));
+                fileInput.files = dataTransfer.files;
+                displayUploadedFiles();
+                updateFileCounter();
+                Swal.fire({
+                    title: 'Success',
+                    text: isClearSelected ? 'Selected files cleared successfully' : 'All files cleared successfully',
+                    icon: 'success',
+                    timer: 1500,
+                    showConfirmButton: false,
+                });
+                if (isSelectMode) toggleSelectMode();
+            }
+        }
+
+        async function resetFile(fileType) {
+            const fileName = fileType === 'invoices' ? 'invoices.xlsx' :
+                            fileType === 'handwritten_invoices' ? 'handwritten_invoices.xlsx' :
+                            'contracts.xlsx';
+            const result = await Swal.fire({
+                title: 'Confirm Reset',
+                text: `Are you sure you want to clear all data from ${fileName}? This will keep the file but remove its contents.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, reset',
+                cancelButtonText: 'Cancel',
+            });
+
+            if (result.isConfirmed) {
+                try {
+                    const response = await fetch('/reset_file', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ file_type: fileType }),
+                    });
+                    const data = await response.json();
+
+                    if (data.status === 'success') {
+                        Swal.fire({
+                            title: 'Success',
+                            text: `${fileName} has been reset successfully`,
+                            icon: 'success',
+                            timer: 1500,
+                            showConfirmButton: false,
+                        });
+                        await fetchFiles();
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: `Error resetting ${fileName}: ${data.error}`,
+                            icon: 'error',
+                        });
+                    }
+                } catch (error) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: `Error resetting ${fileName}: ${error.message}`,
+                        icon: 'error',
+                    });
+                }
+            }
+        }
+
+        async function deletePaySlip(filename) {
+            const result = await Swal.fire({
+                title: 'Confirm Deletion',
+                text: `Are you sure you want to delete the payslip file "${filename}"? This action cannot be undone.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete',
+                cancelButtonText: 'Cancel',
+            });
+
+            if (result.isConfirmed) {
+                try {
+                    const response = await fetch('/delete_payslip', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ filename: filename }),
+                    });
+                    const data = await response.json();
+
+                    if (data.status === 'success') {
+                        Swal.fire({
+                            title: 'Success',
+                            text: `${filename} has been deleted successfully`,
+                            icon: 'success',
+                            timer: 1500,
+                            showConfirmButton: false,
+                        });
+                        await fetchFiles(); // Refresh the file list
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: `Error deleting ${filename}: ${data.error}`,
+                            icon: 'error',
+                        });
+                    }
+                } catch (error) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: `Error deleting ${filename}: ${error.message}`,
+                        icon: 'error',
+                    });
+                }
+            }
+        }
+
+        async function fetchFiles() {
+            try {
+                const response = await fetch('/list_files');
+                const data = await response.json();
+                if (data.status === 'success') {
+                    populateSidebar(data.files);
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: `Error fetching files: ${data.error}`,
+                        icon: 'error',
+                    });
+                }
+            } catch (error) {
+                Swal.fire({
+                    title: 'Error',
+                    text: `Error fetching files: ${error.message}`,
+                    icon: 'error',
+                });
+            }
+        }
+
+        function populateSidebar(files) {
+            const paySlipList = document.getElementById('paySlipList');
+            const invoiceList = document.getElementById('invoiceList');
+            const handwrittenInvoiceList = document.getElementById('handwrittenInvoiceList');
+            const contractList = document.getElementById('contractList');
+
+            paySlipList.innerHTML = '';
+            invoiceList.innerHTML = '';
+            handwrittenInvoiceList.innerHTML = '';
+            contractList.innerHTML = '';
+
+            files.pay_slips.forEach(file => {
+                const div = document.createElement('div');
+                div.className = 'file-item';
+                div.dataset.clientName = file.client_name.toLowerCase().replace(/\s+/g, '_');
+                const formattedClientName = normalizeName(file.client_name);
+                div.innerHTML = `
+                    <span class="text-sm truncate flex-1">${formattedClientName}</span>
+                    <div class="button-group">
+                        <a href="/download/output/${file.filename}" class="bg-green-600 text-white py-1 px-2 rounded-md text-xs hover:bg-green-700"><i class="fa fa-download" aria-hidden="true"></i></a>
+                        <button type="button" class="bg-red-600 text-white py-1 px-2 rounded-md text-xs hover:bg-red-700" onclick="deletePaySlip('${file.filename}')"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                    </div>
+                `;
+                paySlipList.appendChild(div);
+            });
+
+            if (files.invoices) {
+                const div = document.createElement('div');
+                div.className = 'file-item';
+                div.innerHTML = `
+                    <span class="text-sm truncate">${files.invoices}</span>
+                    <div class="button-group">
+                        <a href="/download/output/${files.invoices}" class="bg-green-600 text-white py-1 px-2 rounded-md text-xs hover:bg-green-700"><i class="fa fa-download" aria-hidden="true"></i></a>
+                        <button type="button" class="bg-red-600 text-white py-1 px-2 rounded-md text-xs hover:bg-red-700" onclick="resetFile('invoices')"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                    </div>
+                `;
+                invoiceList.appendChild(div);
+            }
+
+            if (files.handwritten_invoices) {
+                const div = document.createElement('div');
+                div.className = 'file-item';
+                div.innerHTML = `
+                    <span class="text-sm truncate">${files.handwritten_invoices}</span>
+                    <div class="button-group">
+                        <a href="/download/output/${files.handwritten_invoices}" class="bg-green-600 text-white py-1 px-2 rounded-md text-xs hover:bg-green-700"><i class="fa fa-download" aria-hidden="true"></i></a>
+                        <button type="button" class="bg-red-600 text-white py-1 px-2 rounded-md text-xs hover:bg-red-700" onclick="resetFile('handwritten_invoices')"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                    </div>
+                `;
+                handwrittenInvoiceList.appendChild(div);
+            }
+
+            if (files.contracts) {
+                const div = document.createElement('div');
+                div.className = 'file-item';
+                div.innerHTML = `
+                    <span class="text-sm truncate">${files.contracts}</span>
+                    <div class="button-group">
+                        <a href="/download/output/${files.contracts}" class="bg-green-600 text-white py-1 px-2 rounded-md text-xs hover:bg-green-700"><i class="fa fa-download" aria-hidden="true"></i></a>
+                        <button type="button" class="bg-red-600 text-white py-1 px-2 rounded-md text-xs hover:bg-red-700" onclick="resetFile('contracts')"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                    </div>
+                `;
+                contractList.appendChild(div);
+            }
+        }
+
+        function filterPaySlips() {
+            const filter = document.getElementById('paySlipFilter').value.toLowerCase().replace(/\s+/g, '_');
+            const paySlipItems = document.getElementById('paySlipList').getElementsByClassName('file-item');
+            Array.from(paySlipItems).forEach(item => {
+                const clientName = item.dataset.clientName.toLowerCase();
+                item.style.display = clientName.includes(filter) ? '' : 'none';
+            });
+        }
+
+        // Drag and Drop Handling
+        const dropArea = document.getElementById('dropArea');
+        const fileInput = document.getElementById('file-input');
+
+        dropArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        dropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropArea.classList.add('dragover');
+        });
+
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.classList.remove('dragover');
+        });
+
+        dropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropArea.classList.remove('dragover');
+            handleFileUpload(Array.from(e.dataTransfer.files));
+        });
+
+        fileInput.addEventListener('change', () => {
+            handleFileUpload(Array.from(fileInput.files));
+        });
+
+        document.getElementById('selectButton').addEventListener('click', toggleSelectMode);
+
+        document.getElementById('clearAllButton').addEventListener('click', clearFiles);
+
+        document.getElementById('processButton').addEventListener('click', async () => {
+            if (uploadedFiles.length === 0) {
+                Swal.fire({
+                    title: 'No Files',
+                    text: 'No files to process',
+                    icon: 'warning',
+                });
+                return;
+            }
+
+            const result = await Swal.fire({
+                title: 'Confirm Processing',
+                text: `Are you sure you want to process ${uploadedFiles.length} file(s)?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, process',
+                cancelButtonText: 'Cancel',
+            });
+
+            if (!result.isConfirmed) return;
+
+            const formData = new FormData();
+            formData.append('doc_type', document.getElementById('doc_type').value);
+            uploadedFiles.forEach(file => formData.append('files', file));
+
+            const processingDiv = document.getElementById('processing');
+            const downloadLinksContainer = document.getElementById('downloadLinksContainer');
+
+            processingDiv.style.display = 'block';
+            downloadLinksContainer.innerHTML = '<p id="processedCounter" class="text-sm font-medium text-gray-700 mb-2 text-center hidden">Processed Files: <span id="processedCount">0</span></p>';
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Processing complete!',
+                        icon: 'success',
+                        timer: 1500,
+                        showConfirmButton: false,
+                    });
+                    let downloadCount = 0;
+                    if (result.download_path) {
+                        const link = document.createElement('a');
+                        link.href = result.download_path;
+                        link.className = 'download-link w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 text-center text-sm';
+                        link.textContent = 'Download Excel File';
+                        downloadLinksContainer.appendChild(link);
+                        downloadCount = 1;
+                    } else if (result.download_paths) {
+                        result.download_paths.forEach((path, index) => {
+                            const link = document.createElement('a');
+                            link.href = path;
+                            link.className = 'download-link w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 text-center text-sm';
+                            link.textContent = `Download ${path.split('/').pop()}`;
+                            downloadLinksContainer.appendChild(link);
+                        });
+                        downloadCount = result.download_paths.length;
+                    }
+                    updateProcessedCounter(downloadCount);
+                    uploadedFiles = [];
+                    fileDisplayNames = [];
+                    selectedIndices = [];
+                    document.getElementById('file-input').value = '';
+                    displayUploadedFiles();
+                    updateFileCounter();
+                    await fetchFiles();
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: `Error: ${result.error}`,
+                        icon: 'error',
+                    });
+                    updateProcessedCounter(0);
+                }
+            } catch (error) {
+                Swal.fire({
+                    title: 'Error',
+                    text: `Error: ${error.message}`,
+                    icon: 'error',
+                });
+                updateProcessedCounter(0);
+            } finally {
+                processingDiv.style.display = 'none';
+            }
+        });
+
+        updateFileAccept();
+        fetchFiles();
+        updateFileCounter();
+    </script>
+</body>
+</html>

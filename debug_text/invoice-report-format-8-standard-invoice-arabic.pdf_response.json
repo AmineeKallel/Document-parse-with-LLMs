@@ -1,0 +1,26 @@
+{
+  "id": "gen-1748195837-yDFtVx7naZHe7hP0r6kv",
+  "provider": "Chutes",
+  "model": "google/gemma-3-27b-it:free",
+  "object": "chat.completion",
+  "created": 1748195837,
+  "choices": [
+    {
+      "logprobs": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "```json\n{\n  \"رقم الفاتورة\": \"INV1800564\",\n  \"التاريخ\": \"27-NOV-18\",\n  \"المبلغ الإجمالي\": \"756.160\",\n  \"اسم المورد\": \"FRESA DEMO COMPANY LIMITED\",\n  \"عنوان المورد\": \"473A - Sai Shahi, 10th Street, Kamakotti Nagar Pallikaranai, Chennai - 600 100, Tamil Nadu, India\",\n  \"رقم التعريفي الجبائي\": \"29760737473\"\n}\n```",
+        "refusal": null,
+        "reasoning": null
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1661,
+    "completion_tokens": 148,
+    "total_tokens": 1809
+  }
+}

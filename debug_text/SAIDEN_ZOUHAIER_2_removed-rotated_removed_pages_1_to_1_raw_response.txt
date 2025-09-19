@@ -1,0 +1,37 @@
+Page 1:
+COTRAS
+52 avenue Habib Bourguiba Cathage Dermech
+N° C.N.S.S : 00201156-75
+
+Bulletin de paie
+Période : Mars 2004
+
+Code       Nom & Prénom               E.Civil    N° C.N.S.S.
+7          SAIDEN ZOUHAIER           M 2       11142713-05
+
+Ech. Cat.  Qualification              Service          Type sal.   N° C.I.N
+           CHAUFFEUR OCCASION        ADMINISTRATIVE   M           02964673
+
+Libellé                      Nombre    Rémunérations    Retenues
+Nombre de jours férié         1.0
+Salaire de base                        249.815
+Prime de présence                     2.080
+Prime de transport                    20.000
+Prime de rendement                   30.000
+Prime de douche                      1.063
+Jours fériés                        9.608
+
+SALAIRE DE BASE                     249.815
+SALAIRE BRUT                       312.586
+C.N.S.S.                            24.225
+Retenues impôt (I.R.P.P)           16.241
+SALAIRE NET                       272.120
+
+Avance sur salaire                                220.000
+
+Emargement
+
+Net à Payer : 52.120
+
+Mode de paiement :
+Espèce

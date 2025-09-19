@@ -1,0 +1,107 @@
+Page 7:
+STE RESTAURANT SHILI FRERES
+98 AVENUE DE LA REPUBLIQUE 2050 HAMMAM-LIF
+CNSS Employeur : 17146364
+BULLETIN DE PAIE FIN DU MOIS
+MATRICULE 029
+N°CNSS 1659111809 CIN 07849496
+NOM & PRENOM ZAGHDOUDI HASSEN
+FONCTION OUVRIER
+SERVICE 101 Restaurant
+MOIS : Juin 2022
+SIT. FAMILIALE : Célibataire - 0
+TITULAIRE
+S.Base : 810.505
+GRADE & ECHELON : 0401 - 1 - 1
+
+CODE   LIBELLE                     NBR      GAINS         RETENUES
+01     SALAIRE DE BASE MENSUEL     26,00    810,505
+10     INDEMNITE DE TRANSPORT      26,00    45,000
+11     INDEMNITE DE PRESENCE                7,080
+22     PRIME DE PANIER                     13,016
+40     SALAIRE BRUT                       875,601
+41     C N S S                     9,18                  80,380
+50     SALAIRE IMPOSABLE                 795,221
+51     I R P P                                         93,225
+60     C.S.S 1%                                        7,157
+52     SALAIRE DU                       694,839
+72     ACOMPTES                                         222,000
+80     SALAIRE NET                      472,839
+
+MODE PAYEMENT
+Virement
+14808808100708264586
+NET A PAYER
+472,839
+
+Page 8:
+STE RESTAURANT SHILI FRERES
+98 AVENUE DE LA REPUBLIQUE 2050 HAMMAM-LIF
+CNSS Employeur : 17146364
+BULLETIN DE PAIE FIN DU MOIS
+MATRICULE 043
+N°CNSS 1718355603 CIN 09624521
+NOM & PRENOM AMRI DHOUHA
+FONCTION OUVRIERE
+SERVICE 101 Restaurant
+MOIS : Juin 2022
+SIT. FAMILIALE : Célibataire - 0
+CONTRACTUEL
+S.Base : 734.287
+GRADE & ECHELON : 0401 - 1 - 1
+
+CODE   LIBELLE                     NBR      GAINS         RETENUES
+01     SALAIRE DE BASE MENSUEL     26,00    734,287
+10     INDEMNITE DE TRANSPORT      26,00    25,000
+11     INDEMNITE DE PRESENCE                7,080
+22     PRIME DE PANIER                     13,016
+40     SALAIRE BRUT                       779,383
+41     C N S S                     9,18                  71,547
+50     SALAIRE IMPOSABLE                 707,836
+51     I R P P                                         72,777
+60     C.S.S 1%                                        6,370
+52     SALAIRE DU                       628,689
+72     ACOMPTES                                         196,000
+80     SALAIRE NET                      432,689
+
+MODE PAYEMENT
+Virement
+14808808100709045048
+NET A PAYER
+432,689
+
+Page 9:
+STE RESTAURANT SHILI FRERES
+98 AVENUE DE LA REPUBLIQUE 2050 HAMMAM-LIF
+CNSS Employeur : 17146364
+BULLETIN DE PAIE FIN DU MOIS
+MATRICULE 006
+N°CNSS 1180794008 CIN 07003475
+NOM & PRENOM SOUIAI JAMILA
+FONCTION COMMIS DE CUISINE
+SERVICE 101 Restaurant
+MOIS : Juin 2022
+SIT. FAMILIALE : Marié(e) - 2
+TITULAIRE
+S.Base : 1134.799
+GRADE & ECHELON : 0401 - 1 - 1
+
+CODE   LIBELLE                     NBR      GAINS         RETENUES
+01     SALAIRE DE BASE MENSUEL     26,00  1 134,799
+10     INDEMNITE DE TRANSPORT      26,00    50,000
+11     INDEMNITE DE PRESENCE                7,080
+22     PRIME DE PANIER                   55,700
+40     SALAIRE BRUT                   1 247,579
+41     C N S S                     9,18                 114,528
+50     SALAIRE IMPOSABLE               1 133,051
+51     I R P P                                       172,277
+60     C.S.S 1%                                        10,197
+52     SALAIRE DU                     950,577
+72     ACOMPTES                                        412,000
+80     SALAIRE NET                    538,577
+
+MODE PAYEMENT
+Virement
+14808808100708515525
+NET A PAYER
+538,577

@@ -1,0 +1,38 @@
+4:
+Société Toukistiquede l'Hôtellerie
+Bulletin de paie
+Octobre 2013
+N° 1347 Cheikh
+Référence : 000097
+
+Numéro Matricule et Nom
+RUE DE L'ETRANGER
+LES BERGES DU LAC
+TUNIS
+N° CNSS Société : 104251-73
+Établissement : Les Berges du Lac
+Convention Collective : Hôtellerie
+
+SUPERVISEUR : Pension
+Prochaine Évaluation : Échelon 3
+Date d'entrée : 01/12/2005
+
+Rubriques                Unité    Base ou taux    Taux    Montant Salaire de Base
+J73 Nombre de jours               26,000
+D42 Salaire de base
+B37 Indem. de transport            392,657
+D78 Indem. de présence             45,500
+A02 Brut total                    613,000
+C01 Cotisation CNSS          1 568,546
+A06 Salaire imposable          1 568,546    9,180
+C21 Assurance maladie          1 424,553                 143,993
+I11 IRPP                      1 568,546    2,450                 38,429
+                                                                 232,729
+
+Période du 23/09/2013 au 22/10/2013
+Brut                Charges Salariales        IRPP        Imposable
+Cumuls mensuels     1 568,546               0,000      -232,729      1 424,553
+Cumuls annuels     17 762,306                          -2 751,542    16 131,0
+
+Mode de paiement : Virement bancaire
+AGENCE 022          14022 0221007000837

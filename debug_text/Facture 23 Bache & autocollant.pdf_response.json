@@ -1,0 +1,26 @@
+{
+  "id": "gen-1748195824-gvp4AkGfk3nmWzE0SRQI",
+  "provider": "Chutes",
+  "model": "google/gemma-3-27b-it:free",
+  "object": "chat.completion",
+  "created": 1748195824,
+  "choices": [
+    {
+      "logprobs": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "\n{\"رقم الفاتورة\":\"56\", \"التاريخ\":\"2022-05-09\", \"المبلغ الإجمالي\":\"376,000\", \"اسم المورد\":\"NCEPTION GRAPHIQUE\", \"عنوان المورد\":\"17, Avenue des martyrs, 2074 El Mourouj 3\", \"رقم التعريفي الجبائي\":\"12 010 000 0002287211 84\"}",
+        "refusal": null,
+        "reasoning": null
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 694,
+    "completion_tokens": 112,
+    "total_tokens": 806
+  }
+}

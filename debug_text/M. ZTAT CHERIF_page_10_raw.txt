@@ -1,0 +1,51 @@
+10:
+Société Industrielle et Commerciale
+ELHAJAR S.A.R.L
+Bulletin de Paie
+Mardi 05 Mars 2013
+
+Période du 23/02/2013 au 22/03/2013
+
+D73 12/13 Nombre de jours
+D41 12/13 Salaire de base
+B42 12/13 Salaire de base
+B37 12/13 Indemn. de transport
+B37 12/13 Indemn. de transport
+D88 Indem. de présence
+D28 Indem. différenciée
+F19 Rappel
+A02 Brut total
+C01 Cotisation CNSS
+A06 Salaire imposable
+C21 Assurance maladie
+I11 IRPP
+
+26,000
+2,179,510
+2,179,510
+507,300
+507,300
+360,931
+2,179,510
+2,179,510
+2,179,510
+
+Charges Salariales
+3,480
+2,625
+
+IRPP
+357,418
+301,878
+
+Net à Payer: 1,504,801
+
+Cumul mensuels
+Brut 2,179,510
+Charges Salariales 0,000
+
+Cumul annuels
+Brut 5,213,933
+
+Mode de paiement: Virement bancaire
+H AGENCE 022 14022 0221007000937

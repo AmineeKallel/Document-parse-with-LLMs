@@ -1,0 +1,108 @@
+Page 0:
+BULLETIN DE PAIE
+CONSTRUCTION ET TRAVAUX SPECIAUX
+COTRAS
+BUREAU 52 AV HABIB BOURGUIBA
+Matricule CNSS : 201156-75
+
+Mois: mai 2003
+Matricule: 0187
+Nom: ZOUHAIER B ABDEKARIM SAIDAN
+N° Cnss: 11142713-05
+Type Paie: Mensuel
+Section: ADMINISTRATION
+Sit. Fam.: M 1
+Fonction: CHAUFFEUR OCCASIONNEL
+Cat.: Echelon :
+
+RUBRIQUES          NBR      BASE       TAUX      MONTANT
+SALAIRE DE BASE    26.00    251.000              + 251.000
+PRIME DE PRESENCE                          + 2.080
+INDEMNITE DE TRANSPORT                    + 20.000
+JOUR FERIE         2.00     9.654               + 19.308
+PRIME DE DOUCHE                          + 1.083
+PRIME DE RENDEMENT                       + 20.000
+-*- SALAIRE BRUT -*-                       = 323.471
+-*- CNSS & RETRAITE -*-                    = 25.069
+-*- SALAIRE IMPOSABLE -*-                   = 298.402
+-*- I.R.P.P -*-                            = 18.538
+-*- SALAIRE NET -*-                        = 279.864
+ACOMPTES SUR SALAIRE                      - 100.000
+
+EMARGEMENT
+
+CENT SOIXANTE DIX NEUF DINARS 864 MILLIMES
+NET A PAYER: 179,864
+
+Page 1:
+BULLETIN DE PAIE
+CONSTRUCTION ET TRAVAUX SPECIAUX
+COTRAS
+BUREAU 52 AV HABIB BOURGUIBA
+Matricule CNSS : 201156-75
+
+Mois: juin 2003
+Matricule: 0187
+Nom: ZOUHAIER B ABDEKARIM SAIDAN
+N° Cnss: 11142713-05
+Type Paie: Mensuel
+Section: ADMINISTRATION
+Sit. Fam.: M 1
+Fonction: CHAUFFEUR OCCASIONNEL
+Cat.: Echelon :
+
+RUBRIQUES          NBR      BASE       TAUX      MONTANT
+SALAIRE DE BASE    26.00    251.000              + 251.000
+PRIME DE PRESENCE                          + 2.080
+INDEMNITE DE TRANSPORT                    + 20.000
+PRIME DE DOUCHE                          + 1.083
+PRIME DE RENDEMENT                       + 30.000
+-*- SALAIRE BRUT -*-                       = 304.163
+-*- CNSS & RETRAITE -*-                    = 23.573
+-*- SALAIRE IMPOSABLE -*-                   = 280.590
+-*- I.R.P.P -*-                            = 16.138
+-*- SALAIRE NET -*-                        = 264.452
+ACOMPTES SUR SALAIRE                      - 250.000
+
+EMARGEMENT
+
+QUATORZE DINARS 452 MILLIMES
+NET A PAYER: 14,452
+
+Page 2:
+BULLETIN DE PAIE
+CONSTRUCTION ET TRAVAUX SPECIAUX
+COTRAS
+BUREAU 52 AV HABIB BOURGUIBA
+Matricule CNSS : 201156-75
+
+Mois: août 2003
+Matricule: 0187
+Nom: ZOUHAIER B ABDEKARIM SAIDAN
+N° Cnss: 11142713-05
+Type Paie: Mensuel
+Section: ADMINISTRATION
+Sit. Fam.: M 1
+Fonction: CHAUFFEUR OCCASIONNEL
+Cat.: Echelon :
+
+RUBRIQUES          NBR      BASE       TAUX      MONTANT
+SALAIRE DE BASE    26.00    251.000              + 251.000
+PRIME DE PRESENCE                          + 2.080
+INDEMNITE DE TRANSPORT                    + 20.000
+JOUR FERIE         1.00     9.654               + 9.654
+PRIME DE DOUCHE                          + 1.083
+PRIME DE RENDEMENT                       + 30.000
+-*- SALAIRE BRUT -*-                       = 313.817
+-*- CNSS & RETRAITE -*-                    = 24.321
+-*- SALAIRE IMPOSABLE -*-                   = 289.496
+-*- I.R.P.P -*-                            = 17.338
+-*- SALAIRE NET -*-                        = 272.158
+ACOMPTES SUR SALAIRE                      - 240.000
+
+EMARGEMENT
+
+TRENTE DEUX DINARS 158 MILLIMES
+NET A PAYER: 32,158
+
+Note: Handwritten note on page 3 says "25 jours de congé" (25 days of leave).
