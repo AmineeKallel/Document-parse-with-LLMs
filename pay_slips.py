@@ -12,7 +12,7 @@ from io import BytesIO
 from unicodedata import normalize
 from openai import OpenAI, OpenAIError
 import requests
-
+from dotenv import load_dotenv
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -22,14 +22,14 @@ logging.basicConfig(
         logging.StreamHandler()
     ]
 )
-
+load_dotenv()
 # Directory for PDFs
 PDF_DIRECTORY = "pay_slips"
 DEBUG_TEXT_DIR = "debug_text"
 OUTPUT_DIR = "output"
 
 # OpenAI API configuration
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "fakekey")
+OPENAI_API_KEY = OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if not OPENAI_API_KEY:
     logging.error("OPENAI_API_KEY environment variable not set")
     raise ValueError("OPENAI_API_KEY environment variable is required")

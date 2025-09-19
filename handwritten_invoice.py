@@ -9,7 +9,7 @@ import base64
 import time
 from mimetypes import guess_type
 from openai import OpenAI, OpenAIError
-
+from dotenv import load_dotenv
 # Configure logging with detailed output
 logging.basicConfig(
     level=logging.DEBUG,
@@ -19,7 +19,7 @@ logging.basicConfig(
         logging.StreamHandler()
     ]
 )
-
+load_dotenv()
 # Directory and output file
 OUTPUT_DIR = "output"
 OUTPUT_EXCEL = os.path.join(OUTPUT_DIR, "handwritten_invoices.xlsx")
@@ -28,7 +28,7 @@ DEBUG_IMAGE_DIR = "debug_images"
 DEBUG_BASE64_DIR = "debug_base64"
 
 # Open AI API configuration
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "fakekey")
+OPENAI_API_KEY = OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if not OPENAI_API_KEY:
     logging.error("OPENAI_API_KEY environment variable not set")
     raise ValueError("OPENAI_API_KEY environment variable is required")
