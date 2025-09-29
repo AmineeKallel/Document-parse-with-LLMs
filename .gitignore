@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Logs
+*.log
+debug_*/
+
+# Environment
+.env
+
+# Generated outputs
+output/
+pay_slips/
+invoices/
+static/uploads/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
