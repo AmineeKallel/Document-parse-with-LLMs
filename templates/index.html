@@ -1,186 +1,1039 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document Processor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
+        :root {
+            --primary: #93C5FD;
+            /* Pastel Blue */
+            --primary-dark: #60A5FA;
+            --primary-darker: #3B82F6;
+            --secondary: #86EFAC;
+            --secondary-dark: #4ADE80;
+            --secondary-darker: #22C55E;
+            --accent: #F0ABFC;
+            --accent-dark: #E879F9;
+            --accent-darker: #D946EF;
+            --danger: #FCA5A5;
+            --danger-dark: #F87171;
+            --danger-darker: #EF4444;
+            --surface: #FAF7F5;
+            --surface-light: #FFFFFF;
+            --surface-dark: #2A2D3A;
+            --surface-darker: #1F2230;
+            --text-primary: #4A4B63;
+            --text-primary-dark: #E2E8F0;
+            --text-secondary: #8B8C9E;
+            --text-secondary-dark: #A0AEC0;
+            --border: #E2E8F0;
+            --border-dark: #4A5568;
+            --shadow: 0 4px 12px -2px rgba(147, 197, 253, 0.15);
+            --shadow-lg: 0 10px 25px -3px rgba(147, 197, 253, 0.2);
+        }
+
+        .dark {
+            --surface: var(--surface-dark);
+            --surface-light: var(--surface-darker);
+            --text-primary: var(--text-primary-dark);
+            --text-secondary: var(--text-secondary-dark);
+            --border: var(--border-dark);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #F0F4FF 0%, #E6F7FF 100%);
+            min-height: 100vh;
+            font-weight: 400;
+        }
+
+        .dark body {
+            background: linear-gradient(135deg, #2A2D3A 0%, #1F2230 100%);
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .dark .glass {
+            background: rgba(42, 45, 58, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card {
+            background: var(--surface-light);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .sidebar {
+            background: var(--surface-light);
+            box-shadow: var(--shadow);
+            border-right: 1px solid var(--border);
+            height: 100vh;
+            overflow-y: auto;
+            width: 320px;
+            min-width: 320px;
+            transition: transform 0.3s ease, width 0.3s ease;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+            width: 0;
+            min-width: 0;
+        }
+
+        .sidebar.collapsed .sidebar-content {
+            display: none;
+        }
+
+        .sidebar.collapsed .hamburger-menu {
+            position: absolute;
+            right: -48px;
+            top: 20px;
+        }
+
+        .hamburger-menu {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 101;
+            background: var(--surface-light);
+            border-radius: 16px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-menu:hover {
+            transform: scale(1.05);
+            background: var(--primary);
+            color: white;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 16px;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            background: var(--surface);
+            min-height: 52px;
+        }
+
+        .file-item:hover {
+            background: rgba(147, 197, 253, 0.1);
+            border-color: rgba(147, 197, 253, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .dark .file-item:hover {
+            background: rgba(147, 197, 253, 0.15);
+        }
+
+        .file-item-content {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            min-width: 0;
+            margin-right: 8px;
+        }
+
+        .file-item-name {
+            flex: 1;
+            min-width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .file-item-buttons {
+            display: flex;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .drop-area {
+            border: 2px dashed #CBD5E1;
+            border-radius: 20px;
+            padding: 48px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(248, 250, 252, 0.7);
+        }
+
+        .dark .drop-area {
+            background: rgba(42, 45, 58, 0.5);
+            border-color: #4A5568;
+        }
+
+        .drop-area.dragover {
+            border-color: var(--primary);
+            background: rgba(147, 197, 253, 0.1);
+            transform: scale(1.02);
+        }
+
+        .dark .drop-area.dragover {
+            background: rgba(147, 197, 253, 0.15);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: #4A4B63;
+            border-radius: 16px;
+            padding: 14px 28px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(147, 197, 253, 0.3);
+            border: none;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(147, 197, 253, 0.4);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-darker) 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+            color: #4A4B63;
+            border-radius: 10px;
+            padding: 6px 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 10px;
+            min-width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(134, 239, 172, 0.3);
+            background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--secondary-darker) 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger) 0%, var(--danger-dark) 100%);
+            color: #4A4B63;
+            border-radius: 10px;
+            padding: 6px 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 10px;
+            min-width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(252, 165, 165, 0.3);
+            background: linear-gradient(135deg, var(--danger-dark) 0%, var(--danger-darker) 100%);
+            color: white;
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            color: #4A4B63;
+            border-radius: 10px;
+            padding: 6px 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 10px;
+        }
+
+        .btn-accent:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(240, 171, 252, 0.3);
+            background: linear-gradient(135deg, var(--accent-dark) 0%, var(--accent-darker) 100%);
+            color: white;
+        }
+
+        .select-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            accent-color: var(--primary);
+        }
+
         .spinner {
             display: none;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
+            border: 4px solid rgba(147, 197, 253, 0.2);
+            border-top: 4px solid var(--primary);
             border-radius: 50%;
             width: 40px;
             height: 40px;
             animation: spin 1s linear infinite;
             margin: auto;
         }
+
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
-        #downloadLinksContainer .download-link {
-            display: block;
-            margin-top: 0.5rem;
-        }
-        .sidebar {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-        }
-        .file-item {
+
+        .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.5rem;
-            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 20px;
+            padding-right: 8px;
         }
-        .file-item:hover {
-            background-color: #f9fafb;
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-        #dropArea {
-            border: 2px dashed #d1d5db;
-            border-radius: 0.375rem;
-            padding: 2rem;
-            text-align: center;
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(147, 197, 253, 0.15);
+            border-radius: 12px;
+            color: var(--primary-darker);
+        }
+
+        .section-icon i {
+            font-size: 14px;
+        }
+
+        .dark .section-icon {
+            background: rgba(147, 197, 253, 0.2);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 50;
+            background: var(--surface-light);
+            border-radius: 16px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
             cursor: pointer;
-            transition: background-color 0.2s, border-color 0.2s;
+            transition: all 0.3s ease;
         }
-        #dropArea.dragover {
-            background-color: #f3f4f6;
-            border-color: #6366f1;
-        }
-        #dropArea:hover {
-            background-color: #f9fafb;
-        }
-        #uploadedFilesList {
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        #uploadedFilesList .file-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.5rem;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        #uploadedFilesList .file-item:last-child {
-            border-bottom: none;
-        }
-        .select-checkbox {
-            width: 1.25rem;
-            height: 1.25rem;
-            margin-right: 0.5rem;
-        }
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .button-group {
-            display: flex;
-            gap: 0.5rem;
-        }
-        #selectButton {
-            background-color: #6b7280;
+
+        .theme-toggle:hover {
+            transform: rotate(15deg) scale(1.05);
+            background: var(--primary);
             color: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.375rem;
-            font-size: 0.75rem;
-            line-height: 1rem;
         }
-        #selectButton.select-mode {
-            background-color: #4b5563;
+
+        .upload-counter {
+            background: var(--primary);
+            color: #4A4B63;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .processed-counter {
+            background: var(--secondary);
+            color: #4A4B63;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .file-type-badge {
+            background: rgba(147, 197, 253, 0.15);
+            color: var(--primary-darker);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .dark .file-type-badge {
+            background: rgba(147, 197, 253, 0.2);
+        }
+
+        .search-input {
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 12px 18px;
+            width: 100%;
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.2);
+            outline: none;
+            transform: translateY(-1px);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .select-mode-active {
+            background: rgba(147, 197, 253, 0.15);
+            border-color: var(--primary);
+        }
+
+        .dark .select-mode-active {
+            background: rgba(147, 197, 253, 0.2);
+        }
+
+        .download-link {
+            display: block;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+            color: #4A4B63;
+            text-align: center;
+            border-radius: 16px;
+            padding: 14px 20px;
+            margin-top: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .download-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(134, 239, 172, 0.3);
+            background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--secondary-darker) 100%);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 48px 24px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 56px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .file-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            color: var(--text-secondary);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(147, 197, 253, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .doc-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .doc-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 28px rgba(147, 197, 253, 0.25);
+            border-color: var(--primary);
+        }
+
+        /* Fixed text colors */
+        .text-title {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .text-label {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .text-description {
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .text-muted {
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* Document type specific colors */
+        .doc-invoices {
+            border-left: 4px solid var(--primary-darker);
+        }
+
+        .doc-invoices .doc-icon {
+            color: var(--primary-darker);
+        }
+
+        .doc-handwritten {
+            border-left: 4px solid var(--accent-darker);
+        }
+
+        .doc-handwritten .doc-icon {
+            color: var(--accent-darker);
+        }
+
+        .doc-payslips {
+            border-left: 4px solid var(--secondary-darker);
+        }
+
+        .doc-payslips .doc-icon {
+            color: var(--secondary-darker);
+        }
+
+        .doc-contracts {
+            border-left: 4px solid #FBBF24;
+        }
+
+        .doc-contracts .doc-icon {
+            color: #FBBF24;
+        }
+
+        /* Font weights */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-weight: 700;
+        }
+
+        .font-light {
+            font-weight: 300;
+        }
+
+        .font-normal {
+            font-weight: 400;
+        }
+
+        .font-medium {
+            font-weight: 500;
+        }
+
+        .font-semibold {
+            font-weight: 600;
+        }
+
+        .font-bold {
+            font-weight: 700;
+        }
+
+        /* Grid layout for 2x2 cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Main content responsive to sidebar */
+        .main-content {
+            transition: margin-left 0.3s ease;
+            margin-left: 320px;
+            width: calc(100% - 320px);
+        }
+
+        .sidebar.collapsed~.main-content {
+            margin-left: 0;
+            width: 100%;
+        }
+
+        /* Sidebar button spacing */
+        .button-group {
+            gap: 8px;
+        }
+
+        /* Section-specific icon colors */
+        .invoices-section .section-icon {
+            background: rgba(147, 197, 253, 0.15);
+            color: var(--primary-darker);
+        }
+
+        .handwritten-section .section-icon {
+            background: rgba(240, 171, 252, 0.15);
+            color: var(--accent-darker);
+        }
+
+        .contracts-section .section-icon {
+            background: rgba(251, 191, 36, 0.15);
+            color: #FBBF24;
+        }
+
+        .payslips-section .section-icon {
+            background: rgba(134, 239, 172, 0.15);
+            color: var(--secondary-darker);
+        }
+
+        /* No Results State */
+        #noResultsState {
+            display: none;
+            text-align: center;
+            padding: 0px 20px;
+            color: var(--text-secondary);
+        }
+
+        #noResultsState .empty-state-icon {
+            font-size: 40px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        /* Fix clearAllButton colors in dark mode */
+        .dark #clearAllButton {
+            color: var(--danger) !important;
+        }
+
+        .dark #clearAllButton:hover {
+            color: var(--danger-dark) !important;
+        }
+
+        /* Add this to fix the Back to Document Types link in dark mode */
+        .dark .text-primary-darker {
+            color: var(--primary) !important;
+        }
+
+        .dark .text-primary-darker:hover {
+            color: var(--primary-dark) !important;
+        }
+
+        /* Fix doc-type-badge colors to use their specific colors */
+        .doc-type-badge.invoices {
+            background: rgba(147, 197, 253, 0.15) !important;
+            color: var(--primary-darker) !important;
+            border-color: rgba(147, 197, 253, 0.3) !important;
+        }
+
+        .doc-type-badge.handwritten_invoices {
+            background: rgba(240, 171, 252, 0.15) !important;
+            color: var(--accent-darker) !important;
+            border-color: rgba(240, 171, 252, 0.3) !important;
+        }
+
+        .doc-type-badge.pay_slips {
+            background: rgba(134, 239, 172, 0.15) !important;
+            color: var(--secondary-darker) !important;
+            border-color: rgba(134, 239, 172, 0.3) !important;
+        }
+
+        .doc-type-badge.contracts {
+            background: rgba(251, 191, 36, 0.15) !important;
+            color: #F59E0B !important;
+            border-color: rgba(251, 191, 36, 0.3) !important;
+        }
+
+        /* Dark mode variants */
+        .dark .doc-type-badge.invoices {
+            background: rgba(147, 197, 253, 0.2) !important;
+            border-color: rgba(147, 197, 253, 0.4) !important;
+        }
+
+        .dark .doc-type-badge.handwritten_invoices {
+            background: rgba(240, 171, 252, 0.2) !important;
+            border-color: rgba(240, 171, 252, 0.4) !important;
+        }
+
+        .dark .doc-type-badge.pay_slips {
+            background: rgba(134, 239, 172, 0.2) !important;
+            border-color: rgba(134, 239, 172, 0.4) !important;
+        }
+
+        .dark .doc-type-badge.contracts {
+            background: rgba(251, 191, 36, 0.2) !important;
+            border-color: rgba(251, 191, 36, 0.4) !important;
+        }
+
+        /* Fix selectAllButton colors in dark mode */
+        .dark #selectAllButton {
+            color: var(--primary) !important;
+        }
+
+        .dark #selectAllButton:hover {
+            color: var(--primary-dark) !important;
         }
     </style>
 </head>
-<body class="bg-gray-100 flex min-h-screen">
-    <!-- Sidebar -->
-    <div class="w-64 bg-white shadow-lg sidebar p-4">
-        <h2 class="text-lg font-bold mb-4">Available Files</h2>
-        
-        <!-- Invoices Section -->
-        <div class="mb-6">
-            <h3 class="text-md font-semibold mb-2">Invoices</h3>
-            <div id="invoiceList" class="space-y-1"></div>
-        </div>
-        
-        <!-- Handwritten Invoices Section -->
-        <div class="mb-6">
-            <h3 class="text-md font-semibold mb-2">Handwritten Invoices</h3>
-            <div id="handwrittenInvoiceList" class="space-y-1"></div>
-        </div>
-        
-        <!-- Contracts Section -->
-        <div class="mb-6">
-            <h3 class="text-md font-semibold mb-2">Contracts</h3>
-            <div id="contractList" class="space-y-1"></div>
-        </div>
-        
-        <!-- Pay Slips Section -->
-        <div class="flex-1">
-            <h3 class="text-md font-semibold mb-2">Pay Slips</h3>
-            <input id="paySlipFilter" type="text" placeholder="Filter by client name" class="w-full mb-2 p-2 border border-gray-300 rounded-md text-sm" oninput="filterPaySlips()">
-            <div id="paySlipList" class="space-y-1"></div>
-        </div>
+
+<body class="flex min-h-screen">
+    <!-- Hamburger Menu -->
+    <div class="hamburger-menu" id="hamburger-menu">
+        <i class="fas fa-bars text-title"></i>
     </div>
-    
-    <!-- Main Content -->
-    <div class="flex-1 flex items-center justify-center p-4">
-        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-            <form id="uploadForm" enctype="multipart/form-data" class="space-y-4">
-                <div class="mb-6">
-                    <label for="doc_type" class="block text-sm font-medium text-gray-700">Select Document Type</label>
-                    <select id="doc_type" name="doc_type" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" onchange="updateFileAccept()">
-                        <option value="invoices">Invoices</option>
-                        <option value="handwritten_invoices">Handwritten Invoices</option>
-                        <option value="contracts">Contracts</option>
-                        <option value="pay_slips">Pay Slips</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="file-input" class="block text-sm font-medium text-gray-700">Upload Files</label>
-                    <div id="dropArea" class="mt-1">
-                        <p class="text-sm text-gray-600">Drag and drop files here or click to select</p>
-                        <input id="file-input" type="file" name="files" multiple accept=".pdf" class="hidden">
+
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" id="theme-toggle">
+        <i class="fas fa-moon text-title"></i>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-content p-6">
+            <div class="mb-8">
+                <h1 class="text-2xl font-bold text-title flex items-center gap-3">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
+                        <i class="fas fa-file-alt text-white text-lg"></i>
+                    </div>
+                    Document Processor
+                </h1>
+                <p class="text-description text-sm mt-2 font-normal">Manage and process your documents efficiently</p>
+            </div>
+
+            <!-- Invoices Section -->
+            <div class="mb-8 invoices-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="section-icon">
+                            <i class="fas fa-receipt"></i>
+                        </div>
+                        Invoices
+                    </div>
+                    <div id="invoiceButtons" class="button-group flex gap-2 hidden">
+                        <a href="#" class="btn-secondary text-xs download-invoice-btn">
+                            <i class="fas fa-download"></i>
+                        </a>
+                        <button type="button" class="btn-danger text-xs reset-invoice-btn"
+                            onclick="resetFile('invoices')">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
                 </div>
-                <div class="mt-4">
-                    <div id="uploadedCounter" class="text-sm font-medium text-gray-700 mb-2 hidden">Uploaded Files: <span id="fileCount">0</span></div>
-                    <div id="uploadHeader" class="header-container mb-2 hidden">
-                        <button id="selectButton" type="button">Select</button>
-                        <button id="clearAllButton" type="button" class="bg-red-600 text-white py-1 px-2 rounded-md text-xs hover:bg-red-700">Clear All</button>
+                <div id="invoiceList" class="space-y-2"></div>
+            </div>
+
+            <!-- Handwritten Invoices Section -->
+            <div class="mb-8 handwritten-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="section-icon">
+                            <i class="fas fa-pen"></i>
+                        </div>
+                        Handwritten Invoices
                     </div>
-                    <div id="uploadedFilesList"></div>
+                    <div id="handwrittenInvoiceButtons" class="button-group flex gap-2 hidden">
+                        <a href="#" class="btn-secondary text-xs download-handwritten-btn">
+                            <i class="fas fa-download"></i>
+                        </a>
+                        <button type="button" class="btn-danger text-xs reset-handwritten-btn"
+                            onclick="resetFile('handwritten_invoices')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
                 </div>
-                <button type="button" id="processButton" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 hidden">Process Files</button>
-            </form>
-            <div id="processing" class="spinner mt-4"></div>
-            <p id="status" class="mt-4 text-center text-sm text-gray-600"></p>
-            <div id="downloadLinksContainer" class="mt-4">
-                <p id="processedCounter" class="text-sm font-medium text-gray-700 mb-2 text-center hidden">Processed Files: <span id="processedCount">0</span></p>
+                <div id="handwrittenInvoiceList" class="space-y-2"></div>
+            </div>
+
+            <!-- Contracts Section -->
+            <div class="mb-8 contracts-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="section-icon">
+                            <i class="fas fa-file-contract"></i>
+                        </div>
+                        Contracts
+                    </div>
+                    <div id="contractButtons" class="button-group flex gap-2 hidden">
+                        <a href="#" class="btn-secondary text-xs download-contract-btn">
+                            <i class="fas fa-download"></i>
+                        </a>
+                        <button type="button" class="btn-danger text-xs reset-contract-btn"
+                            onclick="resetFile('contracts')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="contractList" class="space-y-2"></div>
+            </div>
+
+            <!-- Pay Slips Section -->
+            <div class="flex-1 payslips-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="section-icon">
+                            <i class="fas fa-money-check"></i>
+                        </div>
+                        Pay Slips
+                    </div>
+                </div>
+                <input id="paySlipFilter" type="text" placeholder="Filter by client name" class="search-input mb-4"
+                    oninput="filterPaySlips()">
+                <div id="paySlipList" class="space-y-2"></div>
+                <!-- No Results State -->
+                <div id="noResultsState" class="empty-state hidden">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <p class="text-muted">No clients found</p>
+                    <p class="text-muted text-sm mt-1 font-normal">Try a different search term</p>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Main Content -->
+    <div class="main-content flex-1 flex items-center justify-center p-8">
+        <div class="w-full max-w-6xl p-8">
+            <h2 id="selectTitle" class="text-3xl font-bold text-title mb-8 text-center">Select Document Type</h2>
+
+            <div id="selectionSection" class="cards-grid">
+                <div class="doc-card card p-8 text-center doc-invoices" onclick="selectDocType('invoices')">
+                    <i class="fas fa-receipt text-5xl doc-icon mb-4"></i>
+                    <h3 class="text-xl font-semibold text-title">Invoices</h3>
+                    <p class="text-description text-sm mt-2 font-normal">Process standard invoice documents</p>
+                </div>
+                <div class="doc-card card p-8 text-center doc-handwritten"
+                    onclick="selectDocType('handwritten_invoices')">
+                    <i class="fas fa-pen text-5xl doc-icon mb-4"></i>
+                    <h3 class="text-xl font-semibold text-title">Handwritten Invoices</h3>
+                    <p class="text-description text-sm mt-2 font-normal">Process handwritten invoice scans</p>
+                </div>
+                <div class="doc-card card p-8 text-center doc-payslips" onclick="selectDocType('pay_slips')">
+                    <i class="fas fa-money-check text-5xl doc-icon mb-4"></i>
+                    <h3 class="text-xl font-semibold text-title">Pay Slips</h3>
+                    <p class="text-description text-sm mt-2 font-normal">Process employee pay statements</p>
+                </div>
+                <div class="doc-card card p-8 text-center doc-contracts" onclick="selectDocType('contracts')">
+                    <i class="fas fa-file-contract text-5xl doc-icon mb-4"></i>
+                    <h3 class="text-xl font-semibold text-title">Contracts</h3>
+                    <p class="text-description text-sm mt-2 font-normal">Process legal contract documents</p>
+                </div>
+            </div>
+
+            <div id="uploadSection" style="display: none;">
+                <div class="mb-6">
+                    <div class="flex items-center justify-start mb-3">
+                        <span class="text-sm text-muted font-medium">Processing:&nbsp;&nbsp;</span>
+                        <span id="selectedDocTypeBadge"
+                            class="doc-type-badge text-xs font-semibold px-3 py-1 rounded-full"></span>
+                    </div>
+                    <button
+                        class="text-primary-darker hover:text-primary-dark transition-colors flex items-center text-sm font-medium"
+                        onclick="goBackToSelection()">
+                        <i class="fas fa-arrow-left mr-2"></i> Back to Document Types
+                    </button>
+                </div>
+                <h2 class="text-3xl font-bold text-title mb-8 text-center">Upload & Process Documents</h2>
+
+                <form id="uploadForm" enctype="multipart/form-data" class="space-y-8">
+                    <input type="hidden" id="doc_type" name="doc_type" value="">
+
+                    <div>
+                        <div id="dropArea" class="drop-area">
+                            <div class="flex flex-col items-center justify-center">
+                                <i class="fas fa-cloud-upload-alt text-4xl text-muted mb-4"></i>
+                                <p class="text-label font-semibold text-lg">Drag and drop files here</p>
+                                <p class="text-muted text-base mt-2 font-normal">or</p>
+                                <button type="button" class="mt-4 btn-primary text-base">Browse Files</button>
+                            </div>
+                            <input id="file-input" type="file" name="files" multiple accept=".pdf" class="hidden">
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <div id="uploadedCounter" class="flex items-center gap-3 hidden">
+                                <div class="upload-counter" id="fileCount">0</div>
+                                <span class="text-lg font-semibold text-label">Files to Process</span>
+                            </div>
+                            <div id="uploadHeader" class="flex gap-4 hidden">
+                                <button id="selectButton" type="button"
+                                    class="text-base font-semibold text-primary-darker hover:text-primary-dark transition-colors">Select</button>
+                                <button id="selectAllButton" type="button"
+                                    class="text-base font-semibold text-primary-darker hover:text-primary-dark transition-colors hidden">Select
+                                    All</button>
+                                <button id="clearAllButton" type="button"
+                                    class="text-base font-semibold text-danger-darker hover:text-danger-dark transition-colors">Clear
+                                    All</button>
+                            </div>
+                        </div>
+
+                        <div id="uploadedFilesList" class="max-h-72 overflow-y-auto space-y-3"></div>
+
+                        <div id="emptyUploadState" class="empty-state">
+                            <div class="empty-state-icon">
+                                <i class="fas fa-folder-open"></i>
+                            </div>
+                            <p class="text-muted text-lg">No files uploaded yet</p>
+                            <p class="text-muted text-base mt-2 font-normal">Upload files to get started</p>
+                        </div>
+                    </div>
+
+                    <button type="button" id="processButton" class="w-full btn-primary text-lg hidden">
+                        <i class="fas fa-cog mr-3"></i> Process Files
+                    </button>
+                </form>
+
+                <div id="processing" class="spinner mt-8"></div>
+                <p id="status" class="mt-6 text-center text-base text-muted font-normal"></p>
+
+                <div id="downloadLinksContainer" class="mt-8">
+                    <div id="processedCounter" class="flex items-center justify-center gap-3 mb-6 hidden">
+                        <div class="processed-counter" id="processedCount">0</div>
+                        <span class="text-lg font-semibold text-label">Files Processed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
+        integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow=="
+        crossorigin="anonymous"></script>
     <script>
+        // JavaScript remains the same as before, only styling has changed
         let uploadedFiles = [];
         let fileDisplayNames = [];
         let processedFileCount = 0;
         let isSelectMode = false;
         let selectedIndices = [];
 
+        document.getElementById('selectAllButton').addEventListener('click', function () {
+            if (selectedIndices.length === uploadedFiles.length && uploadedFiles.length > 0) {
+                // Deselect all if all are selected
+                selectedIndices = [];
+            } else {
+                // Select all
+                selectAllFiles();
+            }
+            displayUploadedFiles();
+            updateClearButtonText();
+        });
+
+        function selectDocType(type) {
+            document.getElementById('doc_type').value = type;
+            updateFileAccept();
+
+            // Update the document type badge
+            const badge = document.getElementById('selectedDocTypeBadge');
+            const typeNames = {
+                'invoices': 'Invoices',
+                'handwritten_invoices': 'Handwritten Invoices',
+                'pay_slips': 'Pay Slips',
+                'contracts': 'Contracts'
+            };
+
+            badge.textContent = typeNames[type];
+            // Clear all classes and add the base + specific type
+            badge.className = 'doc-type-badge text-xs font-semibold px-3 py-1 rounded-full ' + type;
+
+            document.getElementById('selectTitle').style.display = 'none';
+            document.getElementById('selectionSection').style.display = 'none';
+            document.getElementById('uploadSection').style.display = 'block';
+        }
+
+        function goBackToSelection() {
+            document.getElementById('uploadSection').style.display = 'none';
+            document.getElementById('selectTitle').style.display = 'block';
+            document.getElementById('selectionSection').style.display = 'grid';
+            uploadedFiles = [];
+            fileDisplayNames = [];
+            selectedIndices = [];
+            document.getElementById('file-input').value = '';
+            displayUploadedFiles();
+            updateFileCounter();
+
+            // Clear the badge when going back
+            const badge = document.getElementById('selectedDocTypeBadge');
+            badge.textContent = '';
+            badge.className = 'doc-type-badge text-xs font-semibold px-3 py-1 rounded-full';
+        }
+
         function normalizeName(name) {
             return name.replace(/_/g, ' ')
-                       .trim()
-                       .toLowerCase()
-                       .replace(/\s+/g, ' ')
-                       .replace(/(^|\s)\w/g, letter => letter.toUpperCase());
+                .trim()
+                .toLowerCase()
+                .replace(/\s+/g, ' ')
+                .replace(/(^|\s)\w/g, letter => letter.toUpperCase());
         }
 
         function updateFileAccept() {
@@ -233,13 +1086,18 @@
             const uploadedCounter = document.getElementById('uploadedCounter');
             const fileCount = document.getElementById('fileCount');
             const uploadHeader = document.getElementById('uploadHeader');
+            const emptyUploadState = document.getElementById('emptyUploadState');
+
             fileCount.textContent = uploadedFiles.length;
+
             if (uploadedFiles.length > 0) {
                 uploadedCounter.classList.remove('hidden');
                 uploadHeader.classList.remove('hidden');
+                emptyUploadState.style.display = 'none';
             } else {
                 uploadedCounter.classList.add('hidden');
                 uploadHeader.classList.add('hidden');
+                emptyUploadState.style.display = 'block';
                 if (isSelectMode) toggleSelectMode();
             }
         }
@@ -259,10 +1117,21 @@
             isSelectMode = !isSelectMode;
             selectedIndices = [];
             const selectButton = document.getElementById('selectButton');
+            const selectAllButton = document.getElementById('selectAllButton');
             const clearAllButton = document.getElementById('clearAllButton');
-            selectButton.textContent = isSelectMode ? 'Select' : 'Select';
-            selectButton.classList.toggle('select-mode', isSelectMode);
-            clearAllButton.textContent = isSelectMode ? 'Clear' : 'Clear All';
+
+            selectButton.textContent = isSelectMode ? 'Cancel' : 'Select';
+            selectButton.classList.toggle('select-mode-active', isSelectMode);
+
+            // Show/hide select all button
+            if (isSelectMode) {
+                selectAllButton.classList.remove('hidden');
+                updateClearButtonText();
+            } else {
+                selectAllButton.classList.add('hidden');
+                clearAllButton.textContent = 'Clear All';
+            }
+
             displayUploadedFiles();
         }
 
@@ -274,6 +1143,37 @@
                 selectedIndices.splice(idx, 1);
             }
             displayUploadedFiles();
+            updateClearButtonText();
+        }
+
+        function selectAllFiles() {
+            selectedIndices = Array.from({ length: uploadedFiles.length }, (_, i) => i);
+            displayUploadedFiles();
+            updateClearButtonText();
+        }
+
+        function updateClearButtonText() {
+            const clearAllButton = document.getElementById('clearAllButton');
+            const selectAllButton = document.getElementById('selectAllButton');
+
+            if (!isSelectMode) {
+                clearAllButton.textContent = 'Clear All';
+                return;
+            }
+
+            if (selectedIndices.length === uploadedFiles.length && uploadedFiles.length > 0) {
+                // All files are selected
+                clearAllButton.textContent = 'Clear All';
+                selectAllButton.textContent = 'Deselect All';
+            } else if (selectedIndices.length > 0) {
+                // Some files are selected
+                clearAllButton.textContent = 'Clear Selection';
+                selectAllButton.textContent = 'Select All';
+            } else {
+                // No files are selected
+                clearAllButton.textContent = 'Clear All';
+                selectAllButton.textContent = 'Select All';
+            }
         }
 
         function displayUploadedFiles() {
@@ -285,15 +1185,21 @@
                 processButton.classList.remove('hidden');
                 uploadedFiles.forEach((file, index) => {
                     const div = document.createElement('div');
-                    div.className = 'file-item';
-                    const isSelected = selectedIndices.includes(index);
+                    div.className = `file-item ${isSelectMode && selectedIndices.includes(index) ? 'select-mode-active' : ''}`;
                     const checkbox = isSelectMode
-                        ? `<input type="checkbox" class="select-checkbox" ${isSelected ? 'checked' : ''} onclick="toggleFileSelection(${index})">`
+                        ? `<input type="checkbox" class="select-checkbox" ${selectedIndices.includes(index) ? 'checked' : ''} onclick="toggleFileSelection(${index})">`
                         : '';
                     div.innerHTML = `
-                        ${checkbox}
-                        <span class="text-sm truncate flex-1">${fileDisplayNames[index]}</span>
-                        <button type="button" class="bg-red-600 text-white py-1 px-2 rounded-md text-xs hover:bg-red-700" onclick="removeFile(${index})"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                        <div class="file-item-content">
+                            ${checkbox}
+                            <i class="fas fa-file-pdf file-icon"></i>
+                            <span class="text-base truncate text-label font-normal file-item-name">${fileDisplayNames[index]}</span>
+                        </div>
+                        <div class="file-item-buttons">
+                            <button type="button" class="btn-danger" onclick="removeFile(${index})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
                     `;
                     uploadedFilesList.appendChild(div);
                 });
@@ -338,6 +1244,8 @@
             if (uploadedFiles.length === 0) return;
 
             const isClearSelected = isSelectMode && selectedIndices.length > 0;
+            const isClearAll = !isSelectMode || selectedIndices.length === uploadedFiles.length || selectedIndices.length === 0;
+
             const title = isClearSelected ? 'Clear Selected Files' : 'Clear All Files';
             const text = isClearSelected
                 ? `Are you sure you want to clear ${selectedIndices.length} selected file(s)?`
@@ -384,8 +1292,8 @@
 
         async function resetFile(fileType) {
             const fileName = fileType === 'invoices' ? 'invoices.xlsx' :
-                            fileType === 'handwritten_invoices' ? 'handwritten_invoices.xlsx' :
-                            'contracts.xlsx';
+                fileType === 'handwritten_invoices' ? 'handwritten_invoices.xlsx' :
+                    'contracts.xlsx';
             const result = await Swal.fire({
                 title: 'Confirm Reset',
                 text: `Are you sure you want to clear all data from ${fileName}? This will keep the file but remove its contents.`,
@@ -503,77 +1411,99 @@
 
         function populateSidebar(files) {
             const paySlipList = document.getElementById('paySlipList');
-            const invoiceList = document.getElementById('invoiceList');
-            const handwrittenInvoiceList = document.getElementById('handwrittenInvoiceList');
-            const contractList = document.getElementById('contractList');
+            const invoiceButtons = document.getElementById('invoiceButtons');
+            const handwrittenInvoiceButtons = document.getElementById('handwrittenInvoiceButtons');
+            const contractButtons = document.getElementById('contractButtons');
+            const noResultsElement = document.getElementById('noResultsState');
 
             paySlipList.innerHTML = '';
-            invoiceList.innerHTML = '';
-            handwrittenInvoiceList.innerHTML = '';
-            contractList.innerHTML = '';
 
-            files.pay_slips.forEach(file => {
-                const div = document.createElement('div');
-                div.className = 'file-item';
-                div.dataset.clientName = file.client_name.toLowerCase().replace(/\s+/g, '_');
-                const formattedClientName = normalizeName(file.client_name);
-                div.innerHTML = `
-                    <span class="text-sm truncate flex-1">${formattedClientName}</span>
-                    <div class="button-group">
-                        <a href="/download/output/${file.filename}" class="bg-green-600 text-white py-1 px-2 rounded-md text-xs hover:bg-green-700"><i class="fa fa-download" aria-hidden="true"></i></a>
-                        <button type="button" class="bg-red-600 text-white py-1 px-2 rounded-md text-xs hover:bg-red-700" onclick="deletePaySlip('${file.filename}')"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                    </div>
-                `;
-                paySlipList.appendChild(div);
-            });
+            // Hide no results state when populating
+            if (noResultsElement) {
+                noResultsElement.style.display = 'none';
+            }
 
+            // Show/hide buttons for invoices, handwritten invoices, and contracts
             if (files.invoices) {
-                const div = document.createElement('div');
-                div.className = 'file-item';
-                div.innerHTML = `
-                    <span class="text-sm truncate">${files.invoices}</span>
-                    <div class="button-group">
-                        <a href="/download/output/${files.invoices}" class="bg-green-600 text-white py-1 px-2 rounded-md text-xs hover:bg-green-700"><i class="fa fa-download" aria-hidden="true"></i></a>
-                        <button type="button" class="bg-red-600 text-white py-1 px-2 rounded-md text-xs hover:bg-red-700" onclick="resetFile('invoices')"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                    </div>
-                `;
-                invoiceList.appendChild(div);
+                invoiceButtons.classList.remove('hidden');
+                document.querySelector('.download-invoice-btn').href = `/download/output/${files.invoices}`;
+            } else {
+                invoiceButtons.classList.add('hidden');
             }
 
             if (files.handwritten_invoices) {
-                const div = document.createElement('div');
-                div.className = 'file-item';
-                div.innerHTML = `
-                    <span class="text-sm truncate">${files.handwritten_invoices}</span>
-                    <div class="button-group">
-                        <a href="/download/output/${files.handwritten_invoices}" class="bg-green-600 text-white py-1 px-2 rounded-md text-xs hover:bg-green-700"><i class="fa fa-download" aria-hidden="true"></i></a>
-                        <button type="button" class="bg-red-600 text-white py-1 px-2 rounded-md text-xs hover:bg-red-700" onclick="resetFile('handwritten_invoices')"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                    </div>
-                `;
-                handwrittenInvoiceList.appendChild(div);
+                handwrittenInvoiceButtons.classList.remove('hidden');
+                document.querySelector('.download-handwritten-btn').href = `/download/output/${files.handwritten_invoices}`;
+            } else {
+                handwrittenInvoiceButtons.classList.add('hidden');
             }
 
             if (files.contracts) {
-                const div = document.createElement('div');
-                div.className = 'file-item';
-                div.innerHTML = `
-                    <span class="text-sm truncate">${files.contracts}</span>
-                    <div class="button-group">
-                        <a href="/download/output/${files.contracts}" class="bg-green-600 text-white py-1 px-2 rounded-md text-xs hover:bg-green-700"><i class="fa fa-download" aria-hidden="true"></i></a>
-                        <button type="button" class="bg-red-600 text-white py-1 px-2 rounded-md text-xs hover:bg-red-700" onclick="resetFile('contracts')"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                    </div>
-                `;
-                contractList.appendChild(div);
+                contractButtons.classList.remove('hidden');
+                document.querySelector('.download-contract-btn').href = `/download/output/${files.contracts}`;
+            } else {
+                contractButtons.classList.add('hidden');
+            }
+
+            // Add empty states if no files
+            if (files.pay_slips.length === 0) {
+                paySlipList.innerHTML = `
+            <div class="empty-state py-4">
+                <i class="fas fa-file-invoice-dollar empty-state-icon"></i>
+                <p class="text-muted">No pay slips available</p>
+            </div>
+        `;
+            } else {
+                files.pay_slips.forEach(file => {
+                    const div = document.createElement('div');
+                    div.className = 'file-item';
+                    // Set the data attribute for filtering
+                    div.dataset.clientName = file.client_name.toLowerCase().replace(/\s+/g, '_');
+                    const formattedClientName = normalizeName(file.client_name);
+                    div.innerHTML = `
+                <div class="file-item-content">
+                    <i class="fas fa-file-invoice-dollar file-icon"></i>
+                    <span class="text-base truncate text-label font-normal file-item-name">${formattedClientName}</span>
+                </div>
+                <div class="file-item-buttons">
+                    <a href="/download/output/${file.filename}" class="btn-secondary">
+                        <i class="fas fa-download"></i>
+                    </a>
+                    <button type="button" class="btn-danger" onclick="deletePaySlip('${file.filename}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+                    paySlipList.appendChild(div);
+                });
             }
         }
 
         function filterPaySlips() {
             const filter = document.getElementById('paySlipFilter').value.toLowerCase().replace(/\s+/g, '_');
             const paySlipItems = document.getElementById('paySlipList').getElementsByClassName('file-item');
+            const noResultsElement = document.getElementById('noResultsState');
+
+            let visibleCount = 0;
+
             Array.from(paySlipItems).forEach(item => {
                 const clientName = item.dataset.clientName.toLowerCase();
-                item.style.display = clientName.includes(filter) ? '' : 'none';
+                const isVisible = clientName.includes(filter);
+                item.style.display = isVisible ? '' : 'none';
+
+                if (isVisible) {
+                    visibleCount++;
+                }
             });
+
+            // Show/hide no results message
+            if (noResultsElement) {
+                if (filter && visibleCount === 0) {
+                    noResultsElement.style.display = 'block';
+                } else {
+                    noResultsElement.style.display = 'none';
+                }
+            }
         }
 
         // Drag and Drop Handling
@@ -636,7 +1566,7 @@
             const downloadLinksContainer = document.getElementById('downloadLinksContainer');
 
             processingDiv.style.display = 'block';
-            downloadLinksContainer.innerHTML = '<p id="processedCounter" class="text-sm font-medium text-gray-700 mb-2 text-center hidden">Processed Files: <span id="processedCount">0</span></p>';
+            downloadLinksContainer.innerHTML = '<div id="processedCounter" class="flex items-center justify-center gap-3 mb-6 hidden"><div class="processed-counter" id="processedCount">0</div><span class="text-lg font-semibold text-label">Files Processed</span></div>';
 
             try {
                 const response = await fetch('/upload', {
@@ -657,16 +1587,16 @@
                     if (result.download_path) {
                         const link = document.createElement('a');
                         link.href = result.download_path;
-                        link.className = 'download-link w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 text-center text-sm';
-                        link.textContent = 'Download Excel File';
+                        link.className = 'download-link';
+                        link.innerHTML = '<i class="fas fa-download mr-3"></i> Download Excel File';
                         downloadLinksContainer.appendChild(link);
                         downloadCount = 1;
                     } else if (result.download_paths) {
                         result.download_paths.forEach((path, index) => {
                             const link = document.createElement('a');
                             link.href = path;
-                            link.className = 'download-link w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 text-center text-sm';
-                            link.textContent = `Download ${path.split('/').pop()}`;
+                            link.className = 'download-link';
+                            link.innerHTML = `<i class="fas fa-download mr-3"></i> Download ${path.split('/').pop()}`;
                             downloadLinksContainer.appendChild(link);
                         });
                         downloadCount = result.download_paths.length;
@@ -699,9 +1629,40 @@
             }
         });
 
-        updateFileAccept();
+        // Theme toggle event listener
+        const themeToggle = document.getElementById('theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+
+            // Wait for any DOM updates, then replace the entire icon
+            setTimeout(() => {
+                if (document.documentElement.classList.contains('dark')) {
+                    themeToggle.innerHTML = '<i class="fas fa-sun text-title"></i>';
+                } else {
+                    themeToggle.innerHTML = '<i class="fas fa-moon text-title"></i>';
+                }
+            }, 10);
+        });
+
+        // Sidebar toggle event listener
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+        const sidebar = document.getElementById('sidebar');
+        hamburgerMenu.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+
+            // Wait for any DOM updates, then replace the entire icon
+            setTimeout(() => {
+                if (sidebar.classList.contains('collapsed')) {
+                    hamburgerMenu.innerHTML = '<i class="fas fa-arrow-right text-title"></i>';
+                } else {
+                    hamburgerMenu.innerHTML = '<i class="fas fa-bars text-title"></i>';
+                }
+            }, 10);
+        });
+
         fetchFiles();
         updateFileCounter();
     </script>
 </body>
+
 </html>
