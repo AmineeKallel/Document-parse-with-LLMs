@@ -29,7 +29,7 @@ DEBUG_TEXT_DIR = "debug_text"
 OUTPUT_DIR = "output"
 
 # OpenAI API configuration
-OPENAI_API_KEY = OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY") or os.getenv("OPEN_AI_API_KEY")
 if not OPENAI_API_KEY:
     logging.error("OPENAI_API_KEY environment variable not set")
     raise ValueError("OPENAI_API_KEY environment variable is required")
