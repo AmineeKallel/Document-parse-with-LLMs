@@ -28,11 +28,11 @@ DEBUG_IMAGE_DIR = "debug_images"
 DEBUG_BASE64_DIR = "debug_base64"
 
 # Open AI API configuration
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY") or os.getenv("OPEN_AI_API_KEY")
-if not OPENAI_API_KEY:
-    logging.error("OPENAI_API_KEY environment variable not set")
-    raise ValueError("OPENAI_API_KEY environment variable is required")
-client = OpenAI(api_key=OPENAI_API_KEY)
+OPEN_AI_API_KEY = os.getenv("OPEN_AI_API_KEY")
+if not OPEN_AI_API_KEY:
+    logging.error("OPEN_AI_API_KEY environment variable not set")
+    raise ValueError("OPEN_AI_API_KEY environment variable is required")
+client = OpenAI(api_key=OPEN_AI_API_KEY)
 MAX_RETRIES = 3
 RETRY_DELAY = 2
 
